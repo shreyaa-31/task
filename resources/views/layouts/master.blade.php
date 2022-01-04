@@ -114,13 +114,13 @@
     @stack('page_scripts')
 
 
-    <script>  
-    var url = "{{ route('admin.localization') }}";
-    $(".Langchange").change(function(){
-        
-        window.location.href = url + "?lang="+ $(this).val();
-    });  
-</script>
+    <script>
+        var url = "{{ route('admin.localization') }}";
+        $(".Langchange").change(function() {
+
+            window.location.href = url + "?lang=" + $(this).val();
+        });
+    </script>
 </body>
 
 </html>

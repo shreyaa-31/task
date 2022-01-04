@@ -11,40 +11,35 @@ use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Repositories\UserRepository;
+use Illuminate\Validation\Rule;
 
 
 class RegistrationController extends BaseController
 {
+    public function __construct(UserRepository $data)
+    {
+
+        $this->user = new UserRepository($data);
+    }
+
     public function register(RegisterRequest $request)
     {
-        $validatedData = new User;
-        $validatedData->firstname = $request->firstname;
-        $validatedData->lastname = $request->lastname;
-        $validatedData->email = $request->email;
-        $validatedData->category_id = $request->category_id;
-        $validatedData->subcategory_id = $request->subcategory_id;
-        $imageName = time() . '.' . $request->profile->extension();
-        $request->profile->move(public_path('images'), $imageName);
-        $validatedData->profile = $imageName;
-        $validatedData->password = Hash::make($request->input('password'));
-        $validatedData->otp = rand(1111, 9999);
-        $validatedData->remember_token = md5(uniqid(rand(), true));
 
-        $validatedData->save();
+        $validatedData = $this->user->register($request->all());
 
 
-        // $success['token'] =  $validatedData->createToken('MyApp')->accessToken;
+
         $success = [];
         $success['otp'] = $validatedData->otp;
         $success['remember_token'] = $validatedData->remember_token;
 
         return $this->sendResponse($success, 'Register Successfully');
-
     }
 
     public function login(LoginRequest $request)
     {
-        if (Auth::attempt(['email' =>$request->email, 'password' => $request->password])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
 
             $user = Auth::user();
 
@@ -105,7 +100,7 @@ class RegistrationController extends BaseController
 
             return $this->sendResponse($user, 'Token generate');
         } else {
-            return $this->sendResponse([],'Enter registered email');
+            return $this->sendResponse([], 'Enter registered email');
         }
     }
 
@@ -122,7 +117,7 @@ class RegistrationController extends BaseController
                 $user->save();
                 return $this->sendResponse($user, 'Password Change Successfully');
             } else {
-                return $this->sendResponse([],'Enter Correct OTP');
+                return $this->sendResponse([], 'Enter Correct OTP');
             }
         }
     }
@@ -131,5 +126,38 @@ class RegistrationController extends BaseController
     {
         $user = User::get();
         return $this->sendResponse($user, 'Users');
+    }
+
+    public function delete($id)
+    {
+        $user = User::find($id);
+        if(empty($user)){
+            return $this->sendResponse([], 'User not found.');
+        }
+        $user->delete();
+        return $this->sendResponse([], 'User deleted Successfully');
+    }
+
+
+    public function show($id)
+    {
+
+
+        $user = $this->user->edit($id);
+
+        if (empty($user)) {
+            return $this->sendResponse([], 'User not found.');
+        }
+
+        return $this->sendResponse($user, 'User-Data retrieved successfully.');
+    }
+
+    public function update(RegisterRequest $request)
+    {
+
+        $data = $this->user->update($request->all());
+        // dd($data);
+        
+        return $this->sendResponse($data, 'User updated successfully.');
     }
 }

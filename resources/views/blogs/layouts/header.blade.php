@@ -11,8 +11,8 @@
      <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
                <li class="active"><a href="{{ route('blogview')}}">Home</a></li>
-               <li><a href="about.html">About</a></li>
-               <li><a href="gallery.html">Gallery</a></li>
+               <li><a href="{{route('createBlog')}}">Create blog</a></li>
+
                @if(Auth::user())
                <li>
                     <a href="" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -25,7 +25,11 @@
                          <form id="logout-form" action="#" method="POST" class="d-none">
                               @csrf
                          </form>
+                         <a class="dropdown-item update" href="#" data-toggle="modal" data-target="#updateprofile" id="{{ Auth::user()->id }}">
+                              {{ __('Update Profile') }}
+                         </a>
                     </div>
+
                </li>
 
 

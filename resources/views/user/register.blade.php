@@ -89,7 +89,7 @@
 
                                             <div class="form-group">
                                                 <label for="category">{{ __('Category') }} :</label>
-                                                <select class="form-control" name="category" id="category">
+                                                <select class="form-control" name="category_id" id="category_id">
                                                     <option value="">---Select Category ----</option>
                                                     @foreach ($data as $category)
                                                     <option value="{{$category->id}}">
@@ -107,13 +107,13 @@
 
                                             <div class="form-group">
                                                 <label for="subcategory">{{ __('Subcategory') }} :</label>
-                                                <select class="form-control" name="subcategory" id="subcategory">
+                                                <select class="form-control" name="subcategory_id" id="subcategory_id">
                                                     <option value="">---Select Sub Category ----</option>
                                                 </select>
                                             </div>
-                                            @if ($errors->has('subcategory'))
+                                            @if ($errors->has('subcategory_id'))
                                             <span class="invalid-feedback d-block" role="alert">
-                                                <strong>{{ $errors->first('subcategory') }}</strong>
+                                                <strong>{{ $errors->first('subcategory_id') }}</strong>
                                             </span>
                                             @endif
 
@@ -132,7 +132,7 @@
                                             </div>
                                             <div class="form-group">
 
-                                                <button type="submit" class="btn btn-primary">
+                                                <button type="submit" name="submit" value="submit" class="btn btn-primary">
                                                     {{ __('Register') }}
                                                 </button>
                                             </div>
@@ -176,7 +176,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
-        $('#category').on('change', function() {
+        $('#category_id').on('change', function() {
             var catId = $(this).val();
             // console.log(catId);
             $.ajax({
@@ -190,9 +190,9 @@
                 dataType: 'JSON',
                 success: function(data) {
                     // console.log(data.data);
-                    $("#subcategory").html('<option value="">---Select Sub Category ----</option>');
+                    $("#subcategory_id").html('<option value="">---Select Sub Category ----</option>');
                     $.each(data.data, function(key, value) {
-                        $("#subcategory").append('<option value="' + value.id + '">' + value.subcategory_name + '</option>');
+                        $("#subcategory_id").append('<option value="' + value.id + '">' + value.subcategory_name + '</option>');
                     });
                 }
             })
@@ -217,10 +217,10 @@
                     required: true,
                     email: true,
                 },
-                category: {
+                category_id: {
                     required: true,
                 },
-                subcategory: {
+                subcategory_id: {
                     required: true,
                 },
                 password: {
@@ -242,10 +242,10 @@
                     required: "Enter Your Email",
                     email: "Enter Valid Email-Address",
                 },
-                category: {
+                category_id: {
                     required: "Select Appropriate Category",
                 },
-                subcategory: {
+                subcategory_id: {
                     required: "Select Appropriate SubCategory",
                 },
                 password: {
@@ -256,13 +256,13 @@
                 },
             },
             submitHandler: function(form) {
-
+               
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     },
 
-                    url: "{{ route('store')}}",
+                    url: "{{ route('add_user')}}",
                     method: "POST",
                     data: new FormData(form),
                     contentType: false,
@@ -272,7 +272,7 @@
                     success: function(data) {
                         swal("Done!", data.message, "success");
                         $('#register_form').get(0).reset();
-                        window.location.href = 'enterotp/' + data.data.id;
+                        window.location.href = '/user/enterotp/' + data.data.id;
 
                     },
                     error: function(response) {

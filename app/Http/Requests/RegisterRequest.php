@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class RegisterRequest extends FormRequest
 {
@@ -21,15 +22,34 @@ class RegisterRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
-        return [
-            'firstname' => 'required|regex:/^[a-zA-Z]+$/u',
-            'lastname' => 'required|regex:/^[a-zA-Z]+$/u',
-            'email' => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
-            'password' => 'required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
-            'profile' => 'required|mimes:jpeg,png,jpeg',
-        ];
+        // dd($request->all());
+        if($request->id == ""){
+            return [
+                'firstname' => 'required|regex:/^[a-zA-Z]+$/u',
+                'lastname' => 'required|regex:/^[a-zA-Z]+$/u',
+                'email' => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
+                'subcategory_id' => 'required',
+                'category_id' => 'required',
+                'password' => 'required',
+                'profile' => 'required|mimes:jpeg,png,jpeg',
+               
+            ];
+        }
+        else{
+            return[
+                'firstname' => 'required|regex:/^[a-zA-Z]+$/u',
+                'lastname' => 'required|regex:/^[a-zA-Z]+$/u',
+                'email' => 'required|email|unique:users,email,'. $request->id,
+                'profile' => 'mimes:jpeg,png,jpeg',
+
+                
+            ];
+        }
+      
+        
+        
     }
 
     public function messages()

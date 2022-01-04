@@ -9,7 +9,7 @@
     <meta name="keywords" content="">
     <meta name="author" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
+    <meta name="csrf-token" content={{csrf_token()}}>
     <title>Blogs</title>
     <!--
 
@@ -24,6 +24,8 @@ http://www.tooplate.com/view/2085-neuron
     <!-- Main css -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Lora|Merriweather:300,400" rel="stylesheet">
+
+   
 
 </head>
 

@@ -9,7 +9,10 @@ use Illuminate\Auth\Middleware\Authenticate;
 use App\Http\Middleware\CheckStatus;
 use App\Http\Middleware\CheckEmployeeStatus;
 use App\Http\Controllers\users\DashboardController;
-
+use App\Http\Controllers\users\BlogController;
+use App\Models\Blog;
+use App\Http\Controllers\users\LikeController;
+use App\Http\Controllers\users\CommentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,21 +23,19 @@ use App\Http\Controllers\users\DashboardController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('blogs.index');
-})->name('blogview');
+Route::get('/',        'users\BlogController@blogs')->name('blogview');
 
 
-Route::get('/user/register',          'users\RegisterController@showLoginForm')->name('register');
+Route::get('/user/register',          'users\RegisterController@showForm')->name('register');
 Route::get('/forget-pass',          'users\RegisterController@forget_pass')->name('forget-pass');
 Route::get('/getemail',          'users\RegisterController@getemail')->name('getemail');
 Route::get('/getcat',            'users\RegisterController@getcat')->name('getcat');
-Route::post('store',             'users\RegisterController@store')->name('store');
+
+Route::post('/add_user',                'users\RegisterController@add_user')->name('add_user');
 Route::post('/verify_otp',             'users\RegisterController@verify_otp')->name('verify_otp');
 Route::post('/verify_otp_password',             'users\RegisterController@verify_otp_password')->name('verify_otp_password');
 Route::post('/password_change',             'users\RegisterController@password_change')->name('password_change');
-Route::get('/enterotp/{id}',           'users\RegisterController@enterotp')->name('enterotp');
+Route::get('user/enterotp/{id}',           'users\RegisterController@enterotp')->name('enterotp');
 
 
 Route::get('/user/login',        'users\LoginController@showLoginForm')->name('user.login');
@@ -62,8 +63,11 @@ Route::group(['middleware' => ['auth:web', 'userrestrict']], function () {
     Route::post('/getsubcategory',         'users\UpdateController@getsubcategory')->name('getsubcategory');
 });
 
+Route::get('/createBlog',             'users\BlogController@index')->name('createBlog');
+Route::post('/blog-create',             'users\BlogController@store')->name('blog-create');
 
-
-
+Route::get('/blog-detail/{blog}',             'users\BlogController@viewBlog')->name('blog-detail');
+Route::post('/like',                     'users\LikeController@addLike')->name('add-like');
+Route::post('/comment',                     'users\CommentController@addComment')->name('add-comment');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

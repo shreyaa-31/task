@@ -2,33 +2,36 @@
 
 
 @section('content')
-<div class="main-content">
-    <div class="page-content">
-        <div class="container-fluid">
-            
-            <!-- start page title -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box d-flex align-items-center justify-content-between">
+<section id="blog">
+    <div class="container">
+        <div class="row">
 
-
-
+            <div class="col-md-offset-1 col-md-10 col-sm-12">
+                @foreach($blogs as $b)
+                <div class="blog-post-thumb">
+                    <div class="blog-post-image">
+                        <a href="single-post.html">
+                            <img src="storage/images/{{ $b->image }}" class="img-responsive" alt="Blog Image">
+                        </a>
+                    </div>
+                    <div class="blog-post-title">
+                        <a href = "{{route('blog-detail',$b->id)}}"><h3>{{$b->name}}</h3>
+                    </div>
+                    <div class="blog-post-format">
+                        
+                        <span><a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i> {{$b -> likes_count}}Likes</a></span>
+                        <span><a href="#"><i class="fa fa-comment-o"></i> {{$b -> comments_count}} Comments</a></span>
+                    </div>
+                    <div class="blog-post-des">
+                        <p>{{$b->description}}</p>
 
                     </div>
                 </div>
+                @endforeach
             </div>
-            <div class="row">
-                <div class="col-12">
-
-
-                </div>
-            </div>
-        </div> <!-- container-fluid -->
+        </div>
     </div>
-    <!-- End Page-content -->
-</div>
 </section>
 
+@iclude('user.update_user')n
 @endsection
-
-

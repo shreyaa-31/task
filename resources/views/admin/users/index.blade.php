@@ -111,11 +111,11 @@
                         </div>
                         <div class="form-group ">
                             <label for="profile">{{ __('lang.Profile') }} :</label>
-                            <input id="profile" type="file" class="form-control @error('profile') is-invalid @enderror" name="profile" autocomplete="current-profile">
+                            <input id="u_profile" type="file" class="form-control @error('profile') is-invalid @enderror" name="profile" autocomplete="current-profile">
                         </div>
                         <input type="hidden" id="id" name="id" value="">
                         <div class="form-group">
-                            <button type="submit" name="submit" class="btn btn-primary">
+                            <button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary">
                                 {{ __('lang.Update') }}
                             </button>
                         </div>
@@ -127,7 +127,7 @@
     </div>
     @endsection
     @push('page_scripts')
-  
+
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 
@@ -138,81 +138,83 @@
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.1.1/js/buttons.bootstrap4.min.js"></script>
 
-<script>
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
-        $('#users-datatable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('admin.getuser') }}",
-            language: {
-                search: "{{__('lang.search')}}",
-                processing:"{{__('lang.processing')}}",
-                sInfo: "{{__('lang.sInfo')}}",
-                sLengthMenu: "{{__('lang.sLengthMenu')}}",
-                sInfoEmpty:"{{__('lang.sInfoEmpty')}}",
-                sZeroRecords:   "{{__('lang.sZeroRecords')}}",
-                sInfoFiltered:"{{__('lang.sInfoFiltered')}}",
-                oPaginate: {
-                    sFirst: "{{__('lang.oPaginate.sFirst')}}",
-                    sPrevious: "{{__('lang.oPaginate.sPrevious')}}",
-                    sNext: "{{__('lang.oPaginate.sNext')}}",
-                    sLast: "{{__('lang.oPaginate.sLast')}}"
-                }
-            },
-            columns: [{
-                    data: "DT_RowIndex",
-                    name: "DT_RowIndex",
-                    orderable: false,
-                    searchable: false
+
+
+            $('#users-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('admin.getuser') }}",
+                language: {
+                    search: "{{__('lang.search')}}",
+                    processing: "{{__('lang.processing')}}",
+                    sInfo: "{{__('lang.sInfo')}}",
+                    sLengthMenu: "{{__('lang.sLengthMenu')}}",
+                    sInfoEmpty: "{{__('lang.sInfoEmpty')}}",
+                    sZeroRecords: "{{__('lang.sZeroRecords')}}",
+                    sInfoFiltered: "{{__('lang.sInfoFiltered')}}",
+                    oPaginate: {
+                        sFirst: "{{__('lang.oPaginate.sFirst')}}",
+                        sPrevious: "{{__('lang.oPaginate.sPrevious')}}",
+                        sNext: "{{__('lang.oPaginate.sNext')}}",
+                        sLast: "{{__('lang.oPaginate.sLast')}}"
+                    }
                 },
-                {
-                    data: 'profile',
-                    name: "profile"
-                },
-                {
-                    data: 'firstname',
-                    name: "firstname",
-                    searchable: true
-                },
-                {
-                    data: 'lastname',
-                    name: "lastname",
-                    searchable: true
-                },
-                {
-                    data: 'email',
-                    name: "email",
-                    searchable: true
-                },
-                {
-                    data: 'category_id',
-                    name: "category_id"
-                },
-                {
-                    data: 'subcategory_id',
-                    name: "subcategory_id"
-                },
-                {
-                    data: 'status',
-                    name: "status"
-                },
-                {
-                    data: 'action',
-                    name: "action",
-                    orderable: false
-                }
-            ],
-            order: [
-                [0, 'desc']
-            ]
+                columns: [{
+                        data: "DT_RowIndex",
+                        name: "DT_RowIndex",
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'profile',
+                        name: "profile"
+                    },
+                    {
+                        data: 'firstname',
+                        name: "firstname",
+                        searchable: true
+                    },
+                    {
+                        data: 'lastname',
+                        name: "lastname",
+                        searchable: true
+                    },
+                    {
+                        data: 'email',
+                        name: "email",
+                        searchable: true
+                    },
+                    {
+                        data: 'category_id',
+                        name: "category_id"
+                    },
+                    {
+                        data: 'subcategory_id',
+                        name: "subcategory_id"
+                    },
+                    {
+                        data: 'status',
+                        name: "status"
+                    },
+                    {
+                        data: 'action',
+                        name: "action",
+                        orderable: false
+                    }
+                ],
+                order: [
+                    [0, 'desc']
+                ]
+            });
         });
-    });
 
         $('#category').on('change', function() {
             var catId = $(this).val();
@@ -236,85 +238,10 @@
             })
 
         })
-        $.validator.addMethod("lettersonly", function(value, element) {
-            return this.optional(element) || /^[a-z]+$/i.test(value);
-        }, "Letters only please");
-
-        $('#update_form').validate({
-
-            rules: {
-                firstname: {
-                    required: true,
-                    lettersonly: true,
-                },
-                lastname: {
-                    required: true,
-                    lettersonly: true,
-                },
-                email: {
-                    required: true,
-                    email: true,
-                },
-                category: {
-                    required: true,
-                },
-                subcategory: {
-                    required: true,
-                }
-            },
-            messages: {
-                firstname: {
-                    required: "{{__('lang.Enter Your Firstname')}}",
-                },
-                lastname: {
-                    required: "{{__('lang.Enter Your Lastname')}}",
-                },
-                email: {
-                    required: "{{__('lang.Enter Your Email')}}",
-                    email: "{{__('lang.Enter Valid Email-Address')}}",
-
-                },
-                category: {
-                    required: "{{__('lang.Select Appropriate Category')}}",
-                },
-                subcategory: {
-                    required: "{{__('lang.Select Appropriate SubCategory')}}",
-                }
-            },
-            submitHandler: function(form) {
-
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    },
-
-                    url: "{{ route('admin.update')}}",
-                    type: "POST",
-                    data: new FormData(form),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    dataType: 'JSON',
-                    success: function(data) {
-                        // console.log(error.responseJSON.errors);
-                        swal("{{__('lang.Done')}}!", data.message, "success");
-                        $("#updateuser").modal('hide')
-                        $('#users-datatable').DataTable().ajax.reload(); 
-                    },
-                    error: function(response) {
-                        $('.text-strong').text('');
-                        $.each(response.responseJSON.errors, function(field_name, error) {
-                            $('[name=' + field_name + ']').after('<span class="text-strong" style="color:red">' + error + '</span>')
-                        })
-                    }
-
-                })
-            },
-
-        })
-
         $(document).on('click', '.update', function() {
+
             $('.text-strong').html("");
+            $('.error').html('');
 
             var id = $(this).attr('id');
             $.ajax({
@@ -328,103 +255,180 @@
                 },
                 dataType: 'JSON',
                 success: function(data) {
-                    // console.log(data.data.subcategory);
+                    
                     $("#subcategory").html('');
-                    $('#id').val(data.data.user.id);
-                    $('#firstname').val(data.data.user.firstname);
-                    $('#lastname').val(data.data.user.lastname);
-                    $('#email').val(data.data.user.email);
-                    $("#category").val(data.data.user.category_id);
+                    $('#id').val(data.data.user[0].id);
+                    $('#firstname').val(data.data.user[0].firstname);
+                    $('#lastname').val(data.data.user[0].lastname);
+                    $('#email').val(data.data.user[0].email);
+                    $("#category").val(data.data.user[0].category_id);
 
-                    $.each(data.data.subcategory, function(key, value) {
+                    $.each(data.subcategory, function(key, value) {
+                        // console.log(value.id);
                         $("#subcategory").append('<option value="' + value.id + '">' + value.subcategory_name + '</option>');
                     });
-                    $("#subcategory").val(data.data.user.subcategory_id);
-                    $('#profile').html('<img src="' + /images/ + data.data.user.profile + '"height="50px" width="50px"/>');
+                    $("#subcategory").val(data.data.user[0].subcategory_id);
+                    $('#profile').html('<img src="' + /storage/ + "" + /images/ + data.data.user[0].profile + '"height="50px" width="50px"/>');
 
                 }
 
             })
         })
+        $.validator.addMethod("lettersonly", function(value, element) {
+            return this.optional(element) || /^[a-z]+$/i.test(value);
+        }, "Letters only please");
 
+                $('#update_form').validate({
 
-        $(document).on('click', '.changestatus', function() {
+                    rules: {
+                        firstname: {
+                            required: true,
+                            lettersonly: true,
+                        },
+                        lastname: {
+                            required: true,
+                            lettersonly: true,
+                        },
+                        email: {
+                            required: true,
+                            email: true,
+                        },
+                        category: {
+                            required: true,
+                        },
+                        subcategory: {
+                            required: true,
+                        }
+                    },
+                    messages: {
+                        firstname: {
+                            required: "{{__('lang.Enter Your Firstname')}}",
+                        },
+                        lastname: {
+                            required: "{{__('lang.Enter Your Lastname')}}",
+                        },
+                        email: {
+                            required: "{{__('lang.Enter Your Email')}}",
+                            email: "{{__('lang.Enter Valid Email-Address')}}",
 
-            swal({
-                    title: "{{ __('lang.Are you sure?') }}",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        var status = $(this).attr('status');
-                        var id = $(this).attr('id');
+                        },
+                        category: {
+                            required: "{{__('lang.Select Appropriate Category')}}",
+                        },
+                        subcategory: {
+                            required: "{{__('lang.Select Appropriate SubCategory')}}",
+                        }
+                    },
 
-                        $.ajax({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                            },
-                            url: "{{ route('admin.gets')}}",
-                            method: "POST",
-                            data: {
-                                id: id,
-                                status: status,
-                            },
-                            success: function(data) {
-                                console.log(data);
-                                if (data.status == true)
-
-                                {
-                                    swal("{{__('lang.Done')}}!", data.message, "success");
-                                    $('#users-datatable').DataTable().ajax.reload(); 
-                                }
-
-
-                            },
-
-                        })
-                    }
-                })
-        });
-        $(document).on('click', '.delete', function() {
-            swal({
-                    title: "{{ __('lang.Are you sure?') }}",
-                    text: "{{ __('lang.Once deleted, you will not be able to recover!') }}",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        var id = $(this).attr('id');
-
+                    submitHandler: function(form) {
 
                         $.ajax({
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                             },
-                            url: "{{ route('admin.delete')}}",
-                            method: "POST",
-                            data: {
-                                id: id,
-                            },
+
+                            url: "{{ route('admin.update')}}",
+                            type: "POST",
+                            data: new FormData(form),
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            dataType: 'JSON',
                             success: function(data) {
-                                if (data.status == true)
-
-                                {
-                                    swal("{{__('lang.Done')}}!", data.message, "success");
-                                    $('#users-datatable').DataTable().ajax.reload(); 
-                                }
-
-
+                                
+                                swal("{{__('lang.Done')}}!", data.message, "success");
+                                $('#u_profile').val(null);
+                                $("#updateuser").modal('hide')
+                                $('#users-datatable').DataTable().ajax.reload();
+                            },
+                            error: function(response) {
+                                $('.text-strong').text('');
+                                $.each(response.responseJSON.errors, function(field_name, error) {
+                                    $('[name=' + field_name + ']').after('<span class="text-strong" style="color:red">' + error + '</span>')
+                                })
                             },
 
                         })
                     }
+
+                })
+
+
+
+
+                $(document).on('click', '.changestatus', function() {
+
+                    swal({
+                            title: "{{ __('lang.Are you sure?') }}",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                var status = $(this).attr('status');
+                                var id = $(this).attr('id');
+
+                                $.ajax({
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                    },
+                                    url: "{{ route('admin.gets')}}",
+                                    method: "POST",
+                                    data: {
+                                        id: id,
+                                        status: status,
+                                    },
+                                    success: function(data) {
+                                        console.log(data);
+                                        if (data.status == true)
+
+                                        {
+                                            swal("{{__('lang.Done')}}!", data.message, "success");
+                                            $('#users-datatable').DataTable().ajax.reload();
+                                        }
+
+                                    },
+
+                                })
+                            }
+                        })
+                }); $(document).on('click', '.delete', function() {
+                    swal({
+                            title: "{{ __('lang.Are you sure?') }}",
+                            text: "{{ __('lang.Once deleted, you will not be able to recover!') }}",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                var id = $(this).attr('id');
+
+
+                                $.ajax({
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                                    },
+                                    url: "{{ route('admin.delete')}}",
+                                    method: "POST",
+                                    data: {
+                                        id: id,
+                                    },
+                                    success: function(data) {
+                                        if (data.status == true)
+
+                                        {
+                                            swal("{{__('lang.Done')}}!", data.message, "success");
+                                            $('#users-datatable').DataTable().ajax.reload();
+                                        }
+
+
+                                    },
+
+                                })
+                            }
+                        })
                 });
-
-
-        })
     </script>
     @endpush

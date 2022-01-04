@@ -180,7 +180,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class, 
-        Laravel\Passport\PassportServiceProvider::class,       
+        Laravel\Passport\PassportServiceProvider::class, 
+        App\Providers\RepositoryServiceProvider::class      
 
     ],
 

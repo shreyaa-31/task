@@ -34,6 +34,7 @@ class User extends Authenticatable
         'subcategory',
         'password',
         'remember_token',
+        'profile',
     
     ];
 

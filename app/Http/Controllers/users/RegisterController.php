@@ -13,6 +13,7 @@ use App\DataTables\users\UserDataTable;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\ForgetPassword;
 use App\Http\Requests\PasswordRequest;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -20,11 +21,26 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
+    protected $user;
 
-
-    public function showLoginForm(Request $request)
+    public function __construct(UserRepository $data)
     {
+        $this->user = new UserRepository($data);
+    }
 
+
+    
+    public function add_user(RegisterRequest $request){
+        $validatedData = $this->user->register($request->all());
+        // dd($validatedData);
+
+        Mail::to($validatedData->email)->send(new Welcome($validatedData));
+
+        return response()->json(['status' => true, 'data' => $validatedData, 'message' => "Mail sent"]);
+        }
+
+    public function showForm(Request $request)
+    {
         if (Auth::check()) {
             $data=Category::where('status','1')->get(['category_name', 'id']);
             return view('user.index',compact('data'));
@@ -45,29 +61,7 @@ class RegisterController extends Controller
         return response()->json(['status' => true, 'data' => $data]);
     }
 
-    public function store(RegisterRequest $request)
-    {
-     
-       
-        $validatedData = new User;
-        $validatedData->firstname = $request->input('firstname');
-        $validatedData->lastname = $request->input('lastname');
-        $validatedData->email = $request->input('email');
-        $validatedData->category_id = $request->input('category');
-        $validatedData->subcategory_id = $request->input('subcategory');
-        $imageName = time() . '.' . $request->profile->extension();
-        $request->profile->move(public_path('images'), $imageName);
-        $validatedData->profile = $imageName;
-        $validatedData->password = Hash::make($request->input('password'));
-        $validatedData->otp = rand(1111, 9999);
-
-        $validatedData->save();
-
-       
-        Mail::to($validatedData->email)->send(new Welcome($validatedData));
-
-        return response()->json(['status' => true, 'data' => $validatedData, 'message' => "Mail sent"]);
-    }
+    
 
 
     public function enterotp(User $id)

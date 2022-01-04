@@ -143,8 +143,6 @@ class EmployeeAttendanceController extends Controller
     public function export(Request $request)
     {
        
-        // $id = $request->id;
-        // $daterange = $request->daterange;
 
         if ($request->ajax()){
             $data = $request->all();

@@ -139,7 +139,7 @@
 
                         if (data.status == true) {
                             swal("Done!", data.message, "success");
-                            window.location.href = '../user/login';
+                            window.location.href = '../login';
                         } else {
                             swal("Error!", data.message, "error");
                         }

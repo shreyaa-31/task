@@ -48,7 +48,7 @@ class UsersDataTable extends DataTable
             })
 
             ->addColumn('profile', function ($data) {
-                return '<img src="' . '/images/' . $data->profile . '"height="50px" width="50px"/>';
+                return '<img src="' . 'storage/images/' . $data->profile . '"height="50px" width="50px"/>';
             })
             ->editColumn('status',function($data){
                 if ($data->status == 1) {
