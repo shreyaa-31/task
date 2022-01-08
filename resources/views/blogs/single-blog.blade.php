@@ -61,7 +61,7 @@
                               <h3>Leave a Comment</h3>
                               <form id="comment_form" method="post">
                                    @csrf
-                                   <textarea name="comments" rows="5" class="form-control" id="comments" placeholder="Message" message="message" required="required"></textarea>
+                                   <input type="text" name="comments" rows="3" class="form-control" id="comments" placeholder="Type Something...." message="message" required="required">
                                    <input type="hidden" name="blog_id" value="{{$blog->id}}">
                                    <div class="col-md-3 col-sm-4">
                                         <input name="submit" type="submit" value="submit" class="form-control" id="submit" value="Post Your Comment">
@@ -122,7 +122,7 @@
           },
           messages: {
                comments: {
-                    required: "Type Something",
+                    required: "Type Something....",
                }
           },
           submitHandler: function(form) {

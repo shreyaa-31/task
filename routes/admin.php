@@ -10,6 +10,7 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::post('login',    'LoginController@login');
     Route::post('logout',   'LoginController@logout')->name('logout');
 });
+
 Route::group(['middleware' => 'auth:admin'], function () {
 
     Route::get('/dashboard',                   'DashboardController@showDashboared')->name('dashboard');

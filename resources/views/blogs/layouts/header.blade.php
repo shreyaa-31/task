@@ -25,9 +25,7 @@
                          <form id="logout-form" action="#" method="POST" class="d-none">
                               @csrf
                          </form>
-                         <a class="dropdown-item update" href="#" data-toggle="modal" data-target="#updateprofile" id="{{ Auth::user()->id }}">
-                              {{ __('Update Profile') }}
-                         </a>
+
                     </div>
 
                </li>

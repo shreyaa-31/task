@@ -52,7 +52,7 @@ class UserController extends Controller
 
   public function update(RegisterRequest $request)
   {
-    
+
     $data = $this->user->update($request->all());
     return response()->json(['status' => true, 'message' => __('lang.User Data Updated')]);
   }

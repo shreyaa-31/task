@@ -151,7 +151,8 @@
                     processData: false,
                     dataType: 'JSON',
                     success: function(data) {
-                        swal("Done!", data.message, "success");
+                        // swal("Done!", data.message, "success");
+                        window.location.href = "{{route('blogview')}}"
                     },
                     error: function(response) {
                         $('.text-strong').text('');

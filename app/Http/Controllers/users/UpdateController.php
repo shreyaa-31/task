@@ -32,7 +32,7 @@ class UpdateController extends Controller
     $data->category_id = $request->input('category');
     $data->subcategory_id = $request->input('subcategory');
     if ($profile = $request->file('profile')) {
-      $destinationPath = 'images/';
+      $destinationPath = 'storage/images/';
       $profileImage = date('YmdHis') . "." . $profile->getClientOriginalExtension();
       $profile->move($destinationPath, $profileImage);
 

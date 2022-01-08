@@ -144,8 +144,8 @@ class RegistrationController extends BaseController
 
 
         $user = $this->user->edit($id);
-
-        if (empty($user)) {
+        if ($user['user'] == null) {
+            // dd(12);
             return $this->sendResponse([], 'User not found.');
         }
 

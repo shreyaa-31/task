@@ -74,10 +74,8 @@ class BlogController extends Controller
     {
         $blogs = Blog::withCount(['likes', 'comments'])->get();
 
-        $data['user'] = User::find($request->id);
-   
-        $data['subcategory'] = Subcategory::where('category_id',$data['user']['category_id'])->get(['subcategory_name', 'id']);
+       
 
-        return view('blogs.index', compact('blogs','data'));
+        return view('blogs.index', compact('blogs'));
     }
 }
